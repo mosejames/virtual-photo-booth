@@ -165,9 +165,6 @@ btnDownload.addEventListener('click', async () => {
     renderFrame(state);
     btnDownload.textContent = 'Download Photo';
     btnDownload.disabled = false;
-    if (result.ios) {
-      iosHint.hidden = false;
-    }
 
     // Upload to Firebase in the background (non-blocking)
     if (isConfigured() && result.blob) {

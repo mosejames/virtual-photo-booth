@@ -248,22 +248,30 @@ export function renderFrame(state, options) {
 }
 
 /**
- * Export canvas as a JPEG blob, trigger download, and return the blob
+ * Export canvas as a JPEG blob, save/share, and return the blob
  */
 export function exportImage(canvasEl, formatName, state) {
   renderFrame(state, { isExport: true });
 
   return new Promise((resolve) => {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const filename = `photo-booth-${formatName}.jpg`;
 
-    canvasEl.toBlob((blob) => {
-      const url = URL.createObjectURL(blob);
+    canvasEl.toBlob(async (blob) => {
+      const file = new File([blob], filename, { type: 'image/jpeg' });
 
-      if (isIOS) {
-        window.open(url, '_blank');
-        resolve({ ios: true, blob });
+      // Use Web Share API if available (iOS/mobile) — opens native share sheet
+      // where "Save Image" is one tap away
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file] });
+        } catch (err) {
+          // User cancelled the share sheet — that's fine
+          if (err.name !== 'AbortError') console.error(err);
+        }
+        resolve({ shared: true, blob });
       } else {
+        // Desktop fallback: trigger download
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = filename;
@@ -271,7 +279,7 @@ export function exportImage(canvasEl, formatName, state) {
         a.click();
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(url), 5000);
-        resolve({ ios: false, blob });
+        resolve({ shared: false, blob });
       }
     }, 'image/jpeg', 0.92);
   });
