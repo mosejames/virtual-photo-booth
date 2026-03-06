@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>Photo Gallery</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/gallery.css">
+</head>
+<body>
+  <div class="gallery-page">
+
+    <header class="gallery-header">
+      <div class="gallery-header-row">
+        <a href="index.html" class="btn-text">&larr; Booth</a>
+        <h1 class="gallery-title">Gallery</h1>
+        <span class="photo-count" id="photo-count"></span>
+      </div>
+    </header>
+
+    <div id="gallery-empty" class="gallery-empty">
+      <p>No photos yet.</p>
+      <a href="index.html" class="btn btn-primary">Take a Photo</a>
+    </div>
+
+    <div id="gallery-grid" class="gallery-grid"></div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" hidden>
+      <button id="lightbox-close" class="lightbox-close">&times;</button>
+      <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="">
+        <div class="lightbox-meta">
+          <p id="lightbox-name" class="lightbox-name"></p>
+          <p id="lightbox-title" class="lightbox-title"></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="js/gallery.js"></script>
+</body>
+</html>
